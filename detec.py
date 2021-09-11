@@ -2,10 +2,21 @@ import cv2
 import numpy as np
 import imutils
 import pytesseract
+import mysql.connector
+
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  password="",
+  database="licence",
+)
+if(mydb.is_connected()):
+    print("Conectado ao servidor")
+
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 
-cap = cv2.VideoCapture('http://192.168.0.100:8080/?action=stream')
+cap = cv2.VideoCapture('http://192.168.0.100:4747/video')
 car_cascade = cv2.CascadeClassifier('cascades/cars.xml')
 bg = None;
 contador = 0;
@@ -51,8 +62,8 @@ while True:
                         config = r'-c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 --psm 6'
                         caracs = pytesseract.image_to_string(placa, lang='eng', config=config)
                         
-                        caracs = caracs.replace(' ', '')
-                        caracs = caracs.replace('  ', '')
+                        caracs = caracs.replace(' ', "")
+                        caracs = caracs.replace('  ', "")
                         caracs = caracs.replace("-", "")
                         
                         letras = caracs[:3]
@@ -85,10 +96,17 @@ while True:
                         letras = letras.replace('', "")
                         num = num.replace('', "")
 
-                        placa_escrita = letras + '-' + num
+                        placa_escrita = letras + '-1' + num
                         print(placa_escrita[:8])
                         print("-----------------")
+                        if(len(placa_escrita) > 7):
+                            sql = "INSERT INTO veiculo (fk_usuario, entrada, saida, placa, permi, cor) VALUES (%s, %s, %s, %s,%s, %s)"
 
+                            sql_data = (1, '2020/06/06','2021/04/01',placa_escrita[:8],'Pendente','Preto')
+                            mycursor = mydb.cursor()
+                            
+                            mycursor.execute(sql,sql_data)
+                            mydb.commit()
 
 
                        # url = "https://docs.google.com/forms/d/e/1FAIpQLSdUhEkJBoJsSjux9DsP6r5FhM784uO9VIbqM4NJFiuY1E9kzw/formResponse"
