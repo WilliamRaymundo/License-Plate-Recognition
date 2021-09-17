@@ -116,7 +116,7 @@ while True:
                            # print(x.text)
 
                             url = 'http://localhost:81/Interface-License-Plate-Recognition/index/conecta.php'
-                            myobj = '{"fk_local":"1","entrada":"2020/06/06", "saida":"2021/04/01","capPlaca": "placa_escrita[:8]","Permi":"Pendente","captura":"captursa/img001.png" }'
+                            myobj = '{"fk_local":"1","entrada":"2020/06/06", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
                             jsonObj = json.loads(myobj)
                             x = requests.post(url, data = jsonObj )
                             print(x.text)
