@@ -1,9 +1,11 @@
+import datetime
 import cv2
 import imutils
 import pytesseract
 import mysql.connector
 import json
 import requests 
+from datetime import datetime
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -114,9 +116,13 @@ while True:
                            # x = requests.post(url, data = myobj)
 
                            # print(x.text)
+                            data_atual = datetime.now()
+                            data_e_hora_em_texto = data_atual.strftime('%Y/%m/%d %H:%M:%S')
+
+                            print(data_e_hora_em_texto)
 
                             url = 'http://localhost:81/Interface-License-Plate-Recognition/index/conecta.php'
-                            myobj = '{"fk_local":"1","entrada":"2020/06/06", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
+                            myobj = '{"fk_local":"1","entrada":"'+data_e_hora_em_texto+'", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
                             jsonObj = json.loads(myobj)
                             x = requests.post(url, data = jsonObj )
                             print(x.text)
