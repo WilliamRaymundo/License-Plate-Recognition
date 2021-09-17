@@ -1,8 +1,9 @@
 import cv2
-import numpy as np
 import imutils
 import pytesseract
 import mysql.connector
+import json
+import requests 
 
 mydb = mysql.connector.connect(
   host="localhost",
@@ -13,11 +14,9 @@ mydb = mysql.connector.connect(
 if(mydb.is_connected()):
     print("Conectado ao servidor")
 
-
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
-
-cap = cv2.VideoCapture('http://192.168.0.100:4747/video')
-car_cascade = cv2.CascadeClassifier('cascades/cars.xml')
+cap = cv2.VideoCapture('http://192.168.0.100:8080/?action=stream')
+#car_cascade = cv2.CascadeClassifier('cascades/cars.xml')
 bg = None;
 contador = 0;
 #cor pra colocar
@@ -99,15 +98,28 @@ while True:
                         placa_escrita = letras + '-1' + num
                         print(placa_escrita[:8])
                         print("-----------------")
-                        if(len(placa_escrita) > 7):
-                            sql = "INSERT INTO veiculo (fk_usuario, entrada, saida, placa, permi, cor) VALUES (%s, %s, %s, %s,%s, %s)"
+                        if(1==1):
+                       # if(len(placa_escrita) >= 0):
+                            #sql = "INSERT INTO historico (fk_local, entrada, saida, capPlaca, Permi, captura) VALUES (%s, %s, %s, %s,%s, %s)"
 
-                            sql_data = (1, '2020/06/06','2021/04/01',placa_escrita[:8],'Pendente','Preto')
-                            mycursor = mydb.cursor()
+                            #sql_data = (1, '2020/06/06','2021/04/01',placa_escrita[:8],'Pendente','captura/img001.png')
+                           # mycursor = mydb.cursor()
                             
-                            mycursor.execute(sql,sql_data)
-                            mydb.commit()
+                           # mycursor.execute(sql,sql_data)
+                          #  mydb.commit()
 
+                            #url = 'http://localhost:3000/historico'
+                            #myobj = {'fk_local': 1,'entrada': '2020/06/06', 'saida': '2021/04/01','capPlaca': placa_escrita[:8],'Permi':'Pendente','captura':'captura/img001.png' }
+
+                           # x = requests.post(url, data = myobj)
+
+                           # print(x.text)
+
+                            url = 'http://localhost:81/Interface-License-Plate-Recognition/index/conecta.php'
+                            myobj = '{"fk_local":"1","entrada":"2020/06/06", "saida":"2021/04/01","capPlaca": "placa_escrita[:8]","Permi":"Pendente","captura":"captursa/img001.png" }'
+                            jsonObj = json.loads(myobj)
+                            x = requests.post(url, data = jsonObj )
+                            print(x.text)
 
                        # url = "https://docs.google.com/forms/d/e/1FAIpQLSdUhEkJBoJsSjux9DsP6r5FhM784uO9VIbqM4NJFiuY1E9kzw/formResponse"
                         #placa = text
