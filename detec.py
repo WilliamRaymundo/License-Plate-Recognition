@@ -32,6 +32,8 @@ while True:
     frame = imutils.resize(frame, width=640)
     frameAux = frame.copy()
 
+   
+
     if bg is not None:
         #cv2.imshow('bg',bg)
 
@@ -125,7 +127,13 @@ while True:
                             myobj = '{"fk_local":"1","entrada":"'+data_e_hora_em_texto+'", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
                             jsonObj = json.loads(myobj)
                             x = requests.post(url, data = jsonObj )
+
                             print(x.text)
+                           
+                            file = "imagenTeste.png"
+                            cv2.imwrite(file,frame)
+                                                
+                             
 
                        # url = "https://docs.google.com/forms/d/e/1FAIpQLSdUhEkJBoJsSjux9DsP6r5FhM784uO9VIbqM4NJFiuY1E9kzw/formResponse"
                         #placa = text
