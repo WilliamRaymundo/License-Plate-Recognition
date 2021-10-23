@@ -2,19 +2,10 @@ import datetime
 import cv2
 import imutils
 import pytesseract
-import mysql.connector
 import json
 import requests 
 from datetime import datetime
 
-mydb = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="",
-  database="licence",
-)
-if(mydb.is_connected()):
-    print("Conectado ao servidor")
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
 cap = cv2.VideoCapture('http://192.168.0.100:8080/?action=stream')
@@ -123,7 +114,7 @@ while True:
 
                             print(data_e_hora_em_texto)
 
-                            url = 'http://localhost:81/Interface-License-Plate-Recognition/index/conecta.php'
+                            url = 'http://localhost:/Interface-License-Plate-Recognition/index/conecta.php'
                             myobj = '{"fk_local":"1","entrada":"'+data_e_hora_em_texto+'", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
                             jsonObj = json.loads(myobj)
                             x = requests.post(url, data = jsonObj )
