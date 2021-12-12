@@ -5,6 +5,7 @@ import pytesseract
 import json
 import requests 
 from datetime import datetime
+import os
 
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract'
@@ -115,14 +116,15 @@ while True:
                             print(data_e_hora_em_texto)
 
                             url = 'http://localhost:/Interface-License-Plate-Recognition/index/conecta.php'
-                            myobj = '{"fk_local":"1","entrada":"'+data_e_hora_em_texto+'", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"captursa/img001.png" }'
+                            myobj = '{"fk_local":"1","entrada":"'+data_e_hora_em_texto+'", "saida":"2021/04/01","capPlaca": "'+placa_escrita[:8]+'","Permi":"Pendente","captura":"capImg/img001.png" }'
                             jsonObj = json.loads(myobj)
                             x = requests.post(url, data = jsonObj )
 
                             print(x.text)
-                           
-                            file = "imagenTeste.png"
-                            cv2.imwrite(file,frame)
+                            path = r'C:\xampp\htdocs\Interface-License-Plate-Recognition\index\capImg'
+                            
+                            cv2.imwrite(os.path.join(path , 'img001.png'),frame)
+                            
                                                 
                              
 
